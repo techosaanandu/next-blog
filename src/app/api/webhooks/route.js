@@ -2,7 +2,7 @@ import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 
-export async function POST(req: Request) {
+export async function POST(req) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
 
   if (!SIGNING_SECRET) {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error: Missing Svix headers', {
+    return new Response('Error: 1  Missing Svix headers', {
       status: 400,
     });
   }
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   const payload = await req.json();
   const body = JSON.stringify(payload);
 
-  let evt: WebhookEvent;
+  let evt; // No need for type annotation in JavaScript
 
   // Verify payload with headers
   try {
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
-    }) as WebhookEvent;
+    }); // No need for type assertion in JavaScript
   } catch (err) {
     console.error('Error: Could not verify webhook:', err);
     return new Response('Error: Verification error', {
@@ -53,14 +53,6 @@ export async function POST(req: Request) {
   const eventType = evt.type;
   console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
   console.log('Webhook payload:', body);
-
-  if (evt.type === 'user.created') {
-    console.log('userId:', evt.data.id)
-  }
-
-  if (evt.type === 'user.updated') {
-    console.log('updated userId:', evt.data.id)
-  }
 
   return new Response('Webhook received', { status: 200 });
 }
