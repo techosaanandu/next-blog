@@ -5,6 +5,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { useTheme } from 'next-themes';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { dark, light } from '@clerk/themes'
 
 const Header = () => {
   const path = usePathname();
@@ -13,9 +15,9 @@ const Header = () => {
     <Navbar className='border-b-2'>
       <Link
         href='/'
-        className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
+        className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white font-mono'
       >
-        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
+        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white font-mono'>
           Anandus
         </span>
         Blog
@@ -40,11 +42,25 @@ const Header = () => {
         >
           {theme === 'light' ? <FaSun /> : <FaMoon />}
         </Button>
+
+        <SignedIn>
+          <UserButton appearance={{
+            baseTheme: theme === 'light' ? light : dark,
+          }} />
+        </SignedIn>
+
+        <SignedOut>
         <Link href='/sign-in'>
-          <Button gradientDuoTone='purpleToBlue' outline>
-            Sign In
+          <Button gradientDuoTone='purpleToBlue' outline className="font-mono" >
+           Sign In
           </Button>
         </Link>
+        </SignedOut>      
+
+
+
+
+
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
