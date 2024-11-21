@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 
 export async function POST(req) {
-  const SIGNING_SECRET = process.env.SIGNING_SECRET;
+  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!SIGNING_SECRET) {
     throw new Error(
@@ -12,7 +12,7 @@ export async function POST(req) {
   }
 
   // Create new Svix instance with secret
-  const wh = new Webhook(SIGNING_SECRET);
+  const wh = new Webhook(WEBHOOK_SECRET);
 
   // Get headers
   const headerPayload = headers();
